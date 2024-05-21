@@ -1,16 +1,19 @@
-import * as cdk from 'aws-cdk-lib';
-import { Construct } from 'constructs';
+import * as cdk from "aws-cdk-lib";
+import { Tracing } from "aws-cdk-lib/aws-lambda";
+import { NodejsFunction } from "aws-cdk-lib/aws-lambda-nodejs";
+import { Construct } from "constructs";
 // import * as sqs from 'aws-cdk-lib/aws-sqs';
 
 export class XraySegmentCloseStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
 
-    // The code that defines your stack goes here
+    const helloLambda = new NodejsFunction(this, "HelloLambda", {
+      timeout: cdk.Duration.seconds(10),
+      tracing: Tracing.ACTIVE,
 
-    // example resource
-    // const queue = new sqs.Queue(this, 'XraySegmentCloseQueue', {
-    //   visibilityTimeout: cdk.Duration.seconds(300)
-    // });
+      entry: "lib/lambda/hello.ts",
+      handler: "handler",
+    });
   }
 }
